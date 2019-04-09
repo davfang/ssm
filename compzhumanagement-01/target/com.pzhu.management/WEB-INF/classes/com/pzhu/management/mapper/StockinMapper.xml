@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzhu.management.mapper.StockinMapper">
+  <!-- 查询 -->
+  <select id="selectStockin"  resultMap="stockin">
+    select stockin.sid,customer.cname,merchandise.mname,stockin.amount,stockin.sprice,stockin.stockindate,employee.ename from stockin,customer,merchandise,employee
+      where customer.cid=stockin.customerid
+      and merchandise.mid=stockin.merchandiseid
+      and employee.eid=stockin.employeeid
+  </select>
+  <select id="selectStockinByKey" resultMap="stockin">
+    select stockin.sid,customer.cname,merchandise.mname,stockin.amount,stockin.sprice,stockin.stockindate,employee.ename from stockin,customer,merchandise,employee
+      where customer.cid=stockin.customerid
+      and merchandise.mid=stockin.merchandiseid
+      and employee.eid=stockin.employeeid
+        and stockin.sid=#{sid}
+  </select>
+  <select id="selectStockinSelective" resultMap="stockin">
+     select stockin.sid,customer.cname,merchandise.mname,stockin.amount,stockin.sprice,stockin.stockindate,employee.ename from stockin,customer,merchandise,employee
+      where customer.cid=stockin.customerid
+      and merchandise.mid=stockin.merchandiseid
+      and employee.eid=stockin.employeeid
+    <if test="sid!=null and sid!='' ">
+      and stockin.sid LIKE "%${sid}%"
+    </if>
+    <if test="ename!=null and ename!='' ">
+      and employee.ename LIKE "%${ename}%"
+    </if>
+  </select>
+
+  <!-- 删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="com.pzhu.management.pojo.Stockin">
+	delete from stockin where sid=#{sid}
+</delete>
+
+  <!-- 新增数据 -->
+  <insert id="insert" parameterType="com.pzhu.management.pojo.Stockin">
+	insert into stockin (customerid,merchandiseid,amount,sprice,stockindate,employeeid) values ("${customerid.cid}","${merchandiseid.mid}","${amount}","${sprice}","${stockindate}","${employeeid.eid}")
+</insert>
+  <!-- 修改数据 -->
+  <update id="updateByPrimaryKey" parameterType="com.pzhu.management.pojo.Stockin">
+	update stockin set  customerid=#{customerid.cid},merchandiseid=${merchandiseid.mid},employeeid=${employeeid.eid},amount=#{amount},sprice=#{sprice},stockindate=#{stockindate} where sid=#{sid}
+</update>
+  <resultMap type="com.pzhu.management.pojo.Stockin" id="stockin">
+    <!-- 主键用id -->
+    <id property="sid" column="sid"></id>
+    <!-- 非主键用result -->
+    <result property="scode" column="scode"></result>
+    <result property="amount" column="amount"></result>
+    <result property="sprice" column="sprice"></result>
+    <result property="stockindate" column="stockindate"></result>
+    <!-- 引用属性 ,用association-->
+    <association property="customerid" column="customerid" javaType="com.pzhu.management.pojo.Customer">
+      <id property="cid" column="c_id"></id>
+      <result property="ccode" column="ccode"></result>
+      <result property="cname" column="cname"></result>
+      <result property="address" column="address"></result>
+      <result property="ctelephone" column="ctelephone"></result>
+      <result property="cemail" column="cemail"></result>
+    </association>
+
+    <association property="merchandiseid" column="merchandiseid" javaType="com.pzhu.management.pojo.Merchandise">
+      <id property="mid" column="mid"></id>
+      <result property="mcode" column="mcode"></result>
+      <result property="mname" column="mname"></result>
+      <result property="mprice" column="mprice"></result>
+    </association>
+
+    <association property="employeeid" column="employeeid" javaType="com.pzhu.management.pojo.Employee">
+      <id property="eid" column="eid"></id>
+      <result property="ecode" column="ecode"></result>
+      <result property="ename" column="ename"></result>
+      <result property="birthday" column="birthday"></result>
+      <result property="sex" column="sex"></result>
+      <result property="etelephone" column="etelephone"></result>
+      <result property="eemail" column="eemail"></result>
+    </association>
+  </resultMap>
+</mapper>

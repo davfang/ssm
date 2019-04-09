@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pzhu.management.mapper.OrdersMapper">
+
+  <!-- 查询orders表 -->
+  <select id="selectOrders"  resultMap="orders">
+    select * from orders,customer,merchandise,employee
+      where
+      customer.cid=orders.customerid
+      and merchandise.mid=orders.merchandiseid
+      and employee.eid=orders.employeeid
+  </select>
+  <select id="selectByPrimaryKey" resultMap="orders" >
+    select * from orders,customer,merchandise,employee
+    where
+      customer.cid=orders.customerid
+      and merchandise.mid=orders.merchandiseid
+      and employee.eid=orders.employeeid
+        and orders.oid=#{oid}
+  </select>
+  <select id="selectOrdersSelective"  resultMap="orders">
+     SELECT * FROM orders,customer,merchandise,employee
+    WHERE
+      customer.cid=orders.customerid
+      AND merchandise.mid=orders.merchandiseid
+      AND employee.eid=orders.employeeid
+    <if test="oid!=null and oid!='' ">
+      and orders.oid LIKE "%${oid}%"
+    </if>
+    <if test="mname!=null and mname!='' ">
+      and merchandise.mname LIKE "%${mname}%"
+    </if>
+  </select>
+  <!-- 删除orders数据 -->
+  <delete id="deleteByPrimaryKey" parameterType="com.pzhu.management.pojo.Orders">
+	delete  from orders where oid=#{oid}
+</delete>
+  <!-- 新增数据 -->
+  <insert id="insert" parameterType="com.pzhu.management.pojo.Orders">
+	insert into orders (customerid,merchandiseid,merchandisenumber,orderdata,employeeid) values ("${customerid.cid}","${merchandiseid.mid}","${merchandisenumber}","${orderdata}","${employeeid.eid}")
+</insert>
+  <!-- 修改数据 -->
+  <update id="updateByPrimaryKey" parameterType="com.pzhu.management.pojo.Orders">
+update orders set customerid=#{customerid.cid},merchandiseid=${merchandiseid.mid},employeeid=${employeeid.eid},merchandisenumber=#{merchandisenumber},orderdata=#{orderdata} where oid=#{oid}
+</update>
+
+  <resultMap type="com.pzhu.management.pojo.Orders" id="orders">
+    <!-- 主键用id -->
+    <id property="oid" column="oid"></id>
+    <!-- 非主键用result -->
+    <result property="ocode" column="ocode"></result>
+    <result property="merchandisenumber" column="merchandisenumber"></result>
+    <result property="orderdata" column="orderdata"></result>
+    <!-- 引用属性 ,用association-->
+    <association property="customerid" column="customerid" javaType="com.pzhu.management.pojo.Customer">
+      <id property="cid" column="cid"></id>
+      <result property="ccode" column="ccode"></result>
+      <result property="cname" column="cname"></result>
+      <result property="address" column="address"></result>
+      <result property="ctelephone" column="ctelephone"></result>
+      <result property="cemail" column="cemail"></result>
+    </association>
+
+    <association property="merchandiseid" column="merchandiseid" javaType="com.pzhu.management.pojo.Merchandise">
+      <id property="mid" column="mid"></id>
+      <result property="mcode" column="mcode"></result>
+      <result property="mname" column="mname"></result>
+      <result property="mprice" column="mprice"></result>
+    </association>
+
+    <association property="employeeid" column="employeeid" javaType="com.pzhu.management.pojo.Employee">
+      <id property="eid" column="eid"></id>
+      <result property="ecode" column="ecode"></result>
+      <result property="ename" column="ename"></result>
+      <result property="birthday" column="birthday"></result>
+      <result property="sex" column="sex"></result>
+      <result property="etelephone" column="etelephone"></result>
+      <result property="eemail" column="eemail"></result>
+    </association>
+  </resultMap>
+
+</mapper>

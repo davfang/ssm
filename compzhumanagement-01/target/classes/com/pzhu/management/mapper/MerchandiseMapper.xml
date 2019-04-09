@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pzhu.management.mapper.MerchandiseMapper" >
+  <resultMap id="BaseResultMap" type="com.pzhu.management.pojo.Merchandise" >
+    <id column="mid" property="mid" jdbcType="INTEGER" />
+    <result column="mcode" property="mcode" jdbcType="VARCHAR" />
+    <result column="mname" property="mname" jdbcType="VARCHAR" />
+    <result column="mprice" property="mprice" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    mid, mcode, mname, mprice
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pzhu.management.pojo.MerchandiseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from merchandise
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from merchandise
+    where mid = #{mid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from merchandise
+    where mid = #{mid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pzhu.management.pojo.MerchandiseExample" >
+    delete from merchandise
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pzhu.management.pojo.Merchandise" >
+    insert into merchandise (mid, mcode, mname, 
+      mprice)
+    values (#{mid,jdbcType=INTEGER}, #{mcode,jdbcType=VARCHAR}, #{mname,jdbcType=VARCHAR}, 
+      #{mprice,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pzhu.management.pojo.Merchandise" >
+    insert into merchandise
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        mid,
+      </if>
+      <if test="mcode != null" >
+        mcode,
+      </if>
+      <if test="mname != null" >
+        mname,
+      </if>
+      <if test="mprice != null" >
+        mprice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        #{mid,jdbcType=INTEGER},
+      </if>
+      <if test="mcode != null" >
+        #{mcode,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="mprice != null" >
+        #{mprice,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pzhu.management.pojo.MerchandiseExample" resultType="java.lang.Integer" >
+    select count(*) from merchandise
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update merchandise
+    <set >
+      <if test="record.mid != null" >
+        mid = #{record.mid,jdbcType=INTEGER},
+      </if>
+      <if test="record.mcode != null" >
+        mcode = #{record.mcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mname != null" >
+        mname = #{record.mname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mprice != null" >
+        mprice = #{record.mprice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update merchandise
+    set mid = #{record.mid,jdbcType=INTEGER},
+      mcode = #{record.mcode,jdbcType=VARCHAR},
+      mname = #{record.mname,jdbcType=VARCHAR},
+      mprice = #{record.mprice,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pzhu.management.pojo.Merchandise" >
+    update merchandise
+    <set >
+      <if test="mcode != null" >
+        mcode = #{mcode,jdbcType=VARCHAR},
+      </if>
+      <if test="mname != null" >
+        mname = #{mname,jdbcType=VARCHAR},
+      </if>
+      <if test="mprice != null" >
+        mprice = #{mprice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pzhu.management.pojo.Merchandise" >
+    update merchandise
+    set mcode = #{mcode,jdbcType=VARCHAR},
+      mname = #{mname,jdbcType=VARCHAR},
+      mprice = #{mprice,jdbcType=VARCHAR}
+    where mid = #{mid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectMerchandise" resultType="com.pzhu.management.pojo.Merchandise">
+    select * from merchandise;
+  </select>
+
+  <select id="selectMerchandiseSelective" parameterType="com.pzhu.management.pojo.Merchandise" resultType="com.pzhu.management.pojo.Merchandise">
+    select * from merchandise
+    <where>
+      <if test="mname!=null">
+        AND mname LIKE "%"#{mname}"%"
+      </if>
+      <if test="mcode!=null">
+        AND mcode LIKE "%"#{mcode}"%"
+      </if>
+    </where>
+  </select>
+</mapper>

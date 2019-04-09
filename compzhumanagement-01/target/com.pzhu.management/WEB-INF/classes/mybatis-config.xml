@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="useGeneratedKeys" value="true"/>
+	</settings>
+	
+	<!-- 定义别名 -->
+	<typeAliases>
+		<!-- <typeAlias type="com.qfedu.mybatis.pojo.Blog" alias="Blog"/> -->
+		<package name="com.pzhu.management.pojo" />
+	</typeAliases>
+	
+	<!-- 定义映射文件 -->
+	<mappers>
+
+		<!-- <mapper resource="com/qfedu/mybatis/mapper/BlogMapper.xml"/> -->
+		<package name="com.pzhu.management.mapper"/>
+	</mappers>
+</configuration>
